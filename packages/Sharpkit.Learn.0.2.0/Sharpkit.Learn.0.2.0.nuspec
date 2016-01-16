@@ -1,0 +1,26 @@
+<?xml version="1.0"?>
+<package xmlns="http://schemas.microsoft.com/packaging/2011/08/nuspec.xsd">
+  <metadata>
+    <id>Sharpkit.Learn</id>
+    <version>0.2.0</version>
+    <title>Shartpkit.Learn - machine learning library for .Net and Mono.</title>
+    <authors>Sergey Zyuzin</authors>
+    <owners>Sergey Zyuzin</owners>
+    <licenseUrl>https://github.com/foreverzet/Sharpkit.Learn</licenseUrl>
+    <projectUrl>https://github.com/foreverzet/Sharpkit.Learn</projectUrl>
+    <requireLicenseAcceptance>false</requireLicenseAcceptance>
+    <description>Machine learning library for .Net and Mono.
+    Currently has Linear Regression, Logistic Regression, Ridge Regression/Classifier, Svm classifier.
+    Initially it is port of popular Scikit-learn machine learning python library and has very close design.
+    Sharpkit.Learn is based on the state of the art algorithm implementations and uses liblinear, libsvm, Math.Net
+    etc. Various BLAS providers like MKL can be used to speed up the computation. Both dense and sparse matrices
+    are supported.</description>
+    <summary>Machine learning library for .Net and Mono.</summary>
+    <releaseNotes>Alpha version of the library.</releaseNotes>
+    <copyright>Copyright 2013</copyright>
+    <tags>ML MachineLearning Machine Learning DataMining Data Mining Regression Classification LibLinear Logistic Linear libsvm</tags>
+    <dependencies>
+      <dependency id="MathNet.Numerics" version="2.6.1" />
+    </dependencies>
+  </metadata>
+</package>
