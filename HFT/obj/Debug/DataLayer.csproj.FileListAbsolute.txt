@@ -17,3 +17,6 @@ D:\GitHub\NeuralNetworks\DataLayer\bin\Debug\Sharpkit.Learn.xml
 D:\GitHub\NeuralNetworks\DataLayer\obj\Debug\DataLayer.csprojResolveAssemblyReference.cache
 D:\GitHub\NeuralNetworks\DataLayer\obj\Debug\DataLayer.exe
 D:\GitHub\NeuralNetworks\DataLayer\obj\Debug\DataLayer.pdb
+D:\GitHub\NeuralNetworks\DataLayer\bin\Debug\encog-core-cs.dll
+D:\GitHub\NeuralNetworks\DataLayer\bin\Debug\MainProject.exe.config
+D:\GitHub\NeuralNetworks\DataLayer\bin\Debug\HFT.exe.config

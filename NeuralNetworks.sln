@@ -3,9 +3,7 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 2013
 VisualStudioVersion = 12.0.21005.1
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DataLayer", "DataLayer\DataLayer.csproj", "{7AEAB175-0F95-49FA-B4F8-EF1D3B7FA839}"
-EndProject
-Project("{888888A0-9F3D-457C-B088-3A5042F75D52}") = "BusinessLayer", "BusinessLayer\BusinessLayer.pyproj", "{DFCE9A45-A1C8-4F87-83A2-51374AD69232}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "HFT", "HFT\HFT.csproj", "{7AEAB175-0F95-49FA-B4F8-EF1D3B7FA839}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -17,8 +15,6 @@ Global
 		{7AEAB175-0F95-49FA-B4F8-EF1D3B7FA839}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{7AEAB175-0F95-49FA-B4F8-EF1D3B7FA839}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{7AEAB175-0F95-49FA-B4F8-EF1D3B7FA839}.Release|Any CPU.Build.0 = Release|Any CPU
-		{DFCE9A45-A1C8-4F87-83A2-51374AD69232}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{DFCE9A45-A1C8-4F87-83A2-51374AD69232}.Release|Any CPU.ActiveCfg = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

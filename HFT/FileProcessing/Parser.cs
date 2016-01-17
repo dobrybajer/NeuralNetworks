@@ -2,21 +2,18 @@
 using System.Collections.Generic;
 using System.Globalization;
 using System.IO;
-using System.Linq;
+using HFT.Model;
 
-namespace DataLayer
+namespace HFT.FileProcessing
 {
     class Parser
     {
         public string Path { get; set; }
 
-        public Parser(string path)
+        public List<RawDataModel> ReadFile(string path)
         {
             Path = path;
-        }
 
-        public List<RawDataModel> ReadFile()
-        {
             var logFile = new List<RawDataModel>();
 
             using (var sr = new StreamReader(Path))
