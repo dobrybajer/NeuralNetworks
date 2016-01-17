@@ -37,6 +37,11 @@ namespace HFT.Logic
 
         #region Constructors
 
+        public ProblemBase()
+        {
+
+        }
+
         public ProblemBase(Parameters parameters)
         {
             Parameters = parameters;
@@ -53,7 +58,7 @@ namespace HFT.Logic
 
         #region Network actions
 
-        public void CreateNetwork()
+        public virtual void CreateNetwork()
         {
             Network.AddMainLayer(true);
 
@@ -68,7 +73,7 @@ namespace HFT.Logic
             Network.Model.Reset();
         }
 
-        public void TrainNetwork()
+        public virtual void TrainNetwork()
         {
             var train = new Backpropagation(Network.Model, TrainingSet, Parameters.LearingCoefficient, Parameters.InertiaCoefficient)
             {
