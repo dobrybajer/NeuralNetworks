@@ -33,6 +33,12 @@ namespace HFT.Logic
 
         public BasicNeuralDataSet ResultTestSet;
 
+        public OrderBook orderBook;
+
+        public List<double[,]> vector1;
+
+        public List<double[,]> vector2;
+
         #endregion
 
         #region Constructors
@@ -118,6 +124,83 @@ namespace HFT.Logic
             ResultTestSet = new BasicNeuralDataSet(values.ToArray(), result.ToArray());
         }
 
+
+        void ParseTrainingModel( List<RawDataModel> trainingModel)
+        {
+
+            List<RawDataModel> sellOffer = new List<RawDataModel>();
+            List<RawDataModel> buyOffer = new List<RawDataModel>();
+
+            foreach( RawDataModel rec in trainingModel)
+            {
+                if (rec.OrderType == 1)
+                    sellOffer.Add(rec);
+                else
+                    buyOffer.Add(rec);
+            }
+
+            orderBook = new OrderBook(sellOffer, buyOffer);
+
+            var counter = sellOffer.Count<=buyOffer.Count? sellOffer.Count : buyOffer.Count ;
+            vector1 = new List<double[,]>();
+            vector2 = new List<double[,]>();
+
+            for (int i = 10; i < counter; i++)
+            {
+                var newRecord1 = new double[10, 4];
+                var newRecord2 = new double[10, 2];
+                for (int j = 0; j < 10; j++)
+                {
+                    newRecord1[j,0] = sellOffer[i - j].PricePoint;
+                    newRecord1[j, 1] = sellOffer[i - j].Shares;
+                    newRecord1[j, 2] = buyOffer[i - j].PricePoint;
+                    newRecord1[j, 3] = buyOffer[i - j].Shares;
+
+                    newRecord2[j, 0] = sellOffer[i - j].PricePoint - buyOffer[i - j].PricePoint;
+                    newRecord2[j, 1] = (sellOffer[i - j].PricePoint + buyOffer[i - j].PricePoint)/2;
+
+
+                }
+                vector1.Add(newRecord1);
+                vector2.Add(newRecord2);
+                        
+            }
+
+
+            parseVectorsToInputVector();
+           
+        }
+
+        void parseVectorsToInputVector()
+        {
+            double[][] final = new double[vector1.Count][];
+            double[][] state = new double[ vector1.Count][];
+
+            for (int i = 0; i < vector1.Count; i++)
+            {
+                final[i]= new double[(4 + 2) * 10];
+                state[i] = new double[2];
+                for (int j = 0; j < 10; j++)
+                {
+                     final[i][j * 6 + 0] = vector1[i][j, 0];
+                     final[i][j * 6 + 1] = vector1[i][j, 1];
+                     final[i][j * 6 + 2] = vector1[i][j, 2];
+                     final[i][j * 6 + 3] = vector1[i][j, 3];
+
+                     final[i][j * 6 + 4] = vector2[i][j, 0];
+                     final[i][j * 6 + 5] = vector2[i][j, 1];
+
+                     state[i][ 1] = 1;
+                }
+
+                state[i][1] = 1;
+            }
+
+            TrainingSet = new BasicNeuralDataSet(final, state);
+
+
+        }
+
         #endregion
 
         #region Run program
@@ -125,6 +208,9 @@ namespace HFT.Logic
         public virtual void Execute(List<RawDataModel> trainingModel, List<RawDataModel> testModel)
         {
             //LoadTrainingData(trainingModel); // TODO calculate feature set (training)
+            //przerobic wczytane dane na wektory wejściowe
+
+            ParseTrainingModel(trainingModel);
 
             //LoadTestData(testModel); // TODO calculate feature set (test)
 

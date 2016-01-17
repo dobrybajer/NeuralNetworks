@@ -80,6 +80,7 @@
     <Compile Include="FileProcessing\Matlab.cs" />
     <Compile Include="Logic\SVM.cs" />
     <Compile Include="Model\Network.cs" />
+    <Compile Include="Model\OrderBook.cs" />
     <Compile Include="Model\Parameters.cs" />
     <Compile Include="FileProcessing\Parser.cs" />
     <Compile Include="Logic\ProblemBase.cs" />

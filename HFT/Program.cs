@@ -29,6 +29,8 @@ namespace HFT
             var trainingSetModel = parser.ReadFile(trainingSetPath);
             var testSetModel = parser.ReadFile(testSetPath);
 
+
+
             var classification = new ProblemBase(parameters);
             var svm = new SVM(parameters);
             svm.Execute(trainingSetModel, testSetModel);
