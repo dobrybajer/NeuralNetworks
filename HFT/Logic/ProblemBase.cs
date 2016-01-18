@@ -39,6 +39,22 @@ namespace HFT.Logic
 
         public List<double[,]> vector2;
 
+        public List<double[,]> vector3;
+
+        public List<double[]> vector4;
+
+        public List<double[]> vector5;
+
+        //public List<double[,]> vector6;
+
+        //public List<double[,]> vector7;
+
+        //public List<double[,]> vector8;
+
+        //public List<double[,]> vector9;
+
+
+
         #endregion
 
         #region Constructors
@@ -144,11 +160,26 @@ namespace HFT.Logic
             var counter = sellOffer.Count<=buyOffer.Count? sellOffer.Count : buyOffer.Count ;
             vector1 = new List<double[,]>();
             vector2 = new List<double[,]>();
+            vector3 = new List<double[,]>();
+            vector4 = new List<double[]>();
+            vector5 = new List<double[]>();
+            //vector6 = new List<double[,]>();
+            //vector7 = new List<double[,]>();
+            //vector8 = new List<double[,]>();
+            //vector9 = new List<double[,]>();
+          
 
             for (int i = 10; i < counter; i++)
             {
                 var newRecord1 = new double[10, 4];
+
                 var newRecord2 = new double[10, 2];
+                var newRecord3 = new double[10, 4];
+                var newRecord4 = new double[4];
+                var newRecord5 = new double[2];
+                
+              
+
                 for (int j = 0; j < 10; j++)
                 {
                     newRecord1[j,0] = sellOffer[i - j].PricePoint;
@@ -159,11 +190,32 @@ namespace HFT.Logic
                     newRecord2[j, 0] = sellOffer[i - j].PricePoint - buyOffer[i - j].PricePoint;
                     newRecord2[j, 1] = (sellOffer[i - j].PricePoint + buyOffer[i - j].PricePoint)/2;
 
+                    newRecord3[j, 0] = sellOffer[i - 10].PricePoint - sellOffer[i].PricePoint;
+                    newRecord3[j, 1] = buyOffer[i].PricePoint - buyOffer[i - 10].PricePoint;
+                    newRecord3[j, 2] = Math.Abs(sellOffer[(i-j-1)<0?0:i-j-1].PricePoint-sellOffer[i-j].PricePoint);
+                    newRecord3[j, 3] = Math.Abs(buyOffer[(i-j-1)<0?0:i-j-1].PricePoint-buyOffer[i-j].PricePoint);
+
+                    newRecord4[ 0] += sellOffer[i - j].PricePoint;
+                    newRecord4[ 1] += buyOffer[i - j].PricePoint;
+                    newRecord4[ 2] += sellOffer[i - j].Shares;
+                    newRecord4[ 3] += buyOffer[i - j].Shares;
+
+                    newRecord5[0] += sellOffer[i - j].PricePoint - buyOffer[i - j].PricePoint;
+                    newRecord5[1] += sellOffer[i - j].Shares - buyOffer[i - j].Shares;
 
                 }
                 vector1.Add(newRecord1);
                 vector2.Add(newRecord2);
-                        
+                vector3.Add(newRecord3);
+
+                for (int j = 0; j < 4; j++)
+                    newRecord4[j] = newRecord4[j] / 10;
+
+                vector4.Add(newRecord4);
+                vector5.Add(newRecord5);
+
+               
+
             }
 
 
@@ -178,17 +230,30 @@ namespace HFT.Logic
 
             for (int i = 0; i < vector1.Count; i++)
             {
-                final[i]= new double[(4 + 2) * 10];
+                final[i]= new double[(4 + 2 + 4 + 4 + 2) * 10];
                 state[i] = new double[2];
                 for (int j = 0; j < 10; j++)
                 {
-                     final[i][j * 6 + 0] = vector1[i][j, 0];
-                     final[i][j * 6 + 1] = vector1[i][j, 1];
-                     final[i][j * 6 + 2] = vector1[i][j, 2];
-                     final[i][j * 6 + 3] = vector1[i][j, 3];
+                     final[i][j * 16 + 0] = vector1[i][j,0];
+                     final[i][j * 16 + 1] = vector1[i][j,1];
+                     final[i][j * 16 + 2] = vector1[i][j,2];
+                     final[i][j * 16 + 3] = vector1[i][j,3];
 
-                     final[i][j * 6 + 4] = vector2[i][j, 0];
-                     final[i][j * 6 + 5] = vector2[i][j, 1];
+                     final[i][j * 16 + 4] = vector2[i][j,0];
+                     final[i][j * 16 + 5] = vector2[i][j,1];
+
+                     final[i][j * 16 + 6] = vector3[i][j,0];
+                     final[i][j * 16 + 7] = vector3[i][j,1];
+                     final[i][j * 16 + 8] = vector3[i][j,2];
+                     final[i][j * 16 + 9] = vector3[i][j,3];
+
+                     final[i][j * 16 + 10] = vector4[i][0];
+                     final[i][j * 16 + 11] = vector4[i][1];
+                     final[i][j * 16 + 12] = vector4[i][2];
+                     final[i][j * 16 + 13] = vector4[i][3];
+
+                     final[i][j * 16 + 14] = vector5[i][0];
+                     final[i][j * 16 + 15] = vector5[i][1];
 
                      state[i][ 1] = 1;
                 }
