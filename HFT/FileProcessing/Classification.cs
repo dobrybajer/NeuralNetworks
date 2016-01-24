@@ -1,46 +1,50 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using HFT.Model;
 
 namespace HFT.FileProcessing
 {
-    class Classification
+    internal class Classification
     {
-        public List<RawDataModel> AddClasses(List<RawDataModel> traiSet)
+        public List<RawDataModel> AddClasses(List<RawDataModel> trainSet)
         {
-            int time = 5;
-            var indexFirst = traiSet.First(x => x.Status == "T");
-            var indexLast = traiSet[traiSet.Count - 1];
-            DateTime endTime = indexFirst.UpdateTime;
-            endTime = endTime.AddMinutes(5);
-            var counterSet = (indexLast.UpdateTime.Hour - indexFirst.UpdateTime.Hour) * 60 + (indexLast.UpdateTime.Minute - indexFirst.UpdateTime.Minute);
+            const int time = 5; // TODO parametr okno czasowe
+
+            var indexFirst = trainSet.FirstOrDefault(x => x.Status == "T") ?? trainSet.First();
+            var indexLast = trainSet[trainSet.Count - 1];
+
+            var endTime = indexFirst.UpdateTime;
+            endTime = endTime.AddMinutes(time);
+
+            var counterSet = (indexLast.UpdateTime.Hour - indexFirst.UpdateTime.Hour)*60 +
+                             (indexLast.UpdateTime.Minute - indexFirst.UpdateTime.Minute);
             var counter = 1;
 
             //zmienne dla sell
-            Double[] sellMidlePrice = new Double[(int)Math.Ceiling((double)counterSet / time) + 1];
-            int[] sellRecordCount = new int[(int)Math.Ceiling((double)counterSet / time) + 1];
-            int[] sellClassForTime = new int[(int)Math.Ceiling((double)counterSet / time)];
+            var sellMiddlePrice = new Double[(int) Math.Ceiling((double) counterSet/time) + 1];
+            var sellRecordCount = new int[(int) Math.Ceiling((double) counterSet/time) + 1];
+            var sellClassForTime = new int[(int) Math.Ceiling((double) counterSet/time)];
 
             //zmienne dla buy
-            Double[] buyMidlePrice = new Double[(int)Math.Ceiling((double)counterSet / time) + 1];
-            int[] buyRecordCount = new int[(int)Math.Ceiling((double)counterSet / time) + 1];
-            int[] buyClassForTime = new int[(int)Math.Ceiling((double)counterSet / time)];
+            var buyMidlePrice = new Double[(int) Math.Ceiling((double) counterSet/time) + 1];
+            var buyRecordCount = new int[(int) Math.Ceiling((double) counterSet/time) + 1];
+            var buyClassForTime = new int[(int) Math.Ceiling((double) counterSet/time)];
 
-            foreach (var el in traiSet)
+            foreach (var el in trainSet)
             {
                 if (el.Status == "1") //dane po nocnej zmianie
                 {
                     if (el.OrderType == 1)
-                    {  //dla sell
-                        sellMidlePrice[0] += el.PricePoint;
+                    {
+                        //dla sell
+                        sellMiddlePrice[0] += el.PricePoint;
                         sellRecordCount[0] += 1;
                         el.Group = 0;
                     }
                     else
-                    {  //dla buy
+                    {
+                        //dla buy
                         buyMidlePrice[0] += el.PricePoint;
                         buyRecordCount[0] += 1;
                         el.Group = 0;
@@ -52,7 +56,7 @@ namespace HFT.FileProcessing
                     {
                         if (el.OrderType == 1)
                         {
-                            sellMidlePrice[counter] += el.PricePoint;
+                            sellMiddlePrice[counter] += el.PricePoint;
                             sellRecordCount[counter] += 1;
                             el.Group = counter;
                         }
@@ -69,7 +73,7 @@ namespace HFT.FileProcessing
                         {
                             counter++;
                             endTime = endTime.AddMinutes(time);
-                            sellMidlePrice[counter] += el.PricePoint;
+                            sellMiddlePrice[counter] += el.PricePoint;
                             sellRecordCount[counter] += 1;
                             el.Group = counter;
                         }
@@ -81,40 +85,40 @@ namespace HFT.FileProcessing
                             buyRecordCount[counter] += 1;
                             el.Group = counter;
                         }
-
                     }
                 }
             }
+
             //wyliczamy srednią dla każdej grupy
-            for (int i = 0; i < sellMidlePrice.Length; i++)
+            for (var i = 0; i < sellMiddlePrice.Length; i++)
             {
                 if (sellRecordCount[i] != 0)
-                    sellMidlePrice[i] = sellMidlePrice[i] / sellRecordCount[i];
+                    sellMiddlePrice[i] = sellMiddlePrice[i]/sellRecordCount[i];
                 else
-                    sellMidlePrice[i] = 0;
+                    sellMiddlePrice[i] = 0;
             }
 
-            for (int i = 0; i < buyMidlePrice.Length; i++)
+            for (var i = 0; i < buyMidlePrice.Length; i++)
             {
                 if (buyRecordCount[i] != 0)
-                    buyMidlePrice[i] = buyMidlePrice[i] / buyRecordCount[i];
+                    buyMidlePrice[i] = buyMidlePrice[i]/buyRecordCount[i];
                 else
                     buyMidlePrice[i] = 0;
 
             }
 
             //przypisujemy klase na podstawie średniej
-            for (int i = 0; i < sellClassForTime.Length; i++)
+            for (var i = 0; i < sellClassForTime.Length; i++)
             {
-                if (sellMidlePrice[i] < sellMidlePrice[i + 1] && sellMidlePrice[i + 1] != 0)
+                if (sellMiddlePrice[i] < sellMiddlePrice[i + 1] && sellMiddlePrice[i + 1] != 0)
                     sellClassForTime[i] = 2; //wzrost
-                else if (sellMidlePrice[i] > sellMidlePrice[i + 1] && sellMidlePrice[i + 1] != 0)
+                else if (sellMiddlePrice[i] > sellMiddlePrice[i + 1] && sellMiddlePrice[i + 1] != 0)
                     sellClassForTime[i] = 0; // spadek
                 else
                     sellClassForTime[i] = 1; //stały
             }
 
-            for (int i = 0; i < buyClassForTime.Length; i++)
+            for (var i = 0; i < buyClassForTime.Length; i++)
             {
                 if (buyMidlePrice[i] < buyMidlePrice[i + 1] && buyMidlePrice[i + 1] != 0)
                     buyClassForTime[i] = 2; //wzrost
@@ -125,18 +129,13 @@ namespace HFT.FileProcessing
             }
 
             //Finalne przypisanie kalsy do rekordu
-            foreach (var el in traiSet)
-                if (el.Group < sellClassForTime.Length)
-                    if (el.OrderType == 1)
-                    {
-                        el.sellClass = sellClassForTime[el.Group];
-                        // sell
-                    }
-                    else
-                        el.buyClass = buyClassForTime[el.Group];
+            foreach (var el in trainSet.Where(el => el.Group < sellClassForTime.Length))
+                if (el.OrderType == 1)          
+                    el.SellClass = sellClassForTime[el.Group]; 
+                else
+                    el.BuyClass = buyClassForTime[el.Group];
 
-            return traiSet;
+            return trainSet;
         }
-
     }
 }

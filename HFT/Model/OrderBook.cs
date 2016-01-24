@@ -1,20 +1,17 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using System.Collections.Generic;
 
 namespace HFT.Model
 {
     class OrderBook
     {
-        List<RawDataModel> sellOffer { get; set; }
-        List<RawDataModel> buyOffer  { get; set; }
+        List<RawDataModel> SellOffer { get; set; }
 
-        public OrderBook(List<RawDataModel> SellOffer, List<RawDataModel> BuyOffer)
+        List<RawDataModel> BuyOffer  { get; set; }
+
+        public OrderBook(List<RawDataModel> sellOffer, List<RawDataModel> buyOffer)
         {
-            sellOffer = SellOffer;
-            buyOffer = BuyOffer;
+            SellOffer = sellOffer;
+            BuyOffer = buyOffer;
         }
     }
 }

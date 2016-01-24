@@ -79,6 +79,7 @@
   <ItemGroup>
     <Compile Include="FileProcessing\Classification.cs" />
     <Compile Include="FileProcessing\Matlab.cs" />
+    <Compile Include="Logic\MyExtensions.cs" />
     <Compile Include="Logic\SVM.cs" />
     <Compile Include="Model\Network.cs" />
     <Compile Include="Model\OrderBook.cs" />
