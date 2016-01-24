@@ -45,6 +45,12 @@ namespace HFT.Logic
 
         public List<double[]> vector5;
 
+        public  int class1Counter;
+
+        public int class2Counter;
+
+        public int class0Counter;
+
         //public List<double[,]> vector6;
 
         //public List<double[,]> vector7;
@@ -167,7 +173,9 @@ namespace HFT.Logic
             //vector7 = new List<double[,]>();
             //vector8 = new List<double[,]>();
             //vector9 = new List<double[,]>();
-          
+
+            double[][] finalClass= new double[counter-10][];
+
 
             for (int i = 10; i < counter; i++)
             {
@@ -177,8 +185,10 @@ namespace HFT.Logic
                 var newRecord3 = new double[10, 4];
                 var newRecord4 = new double[4];
                 var newRecord5 = new double[2];
-                
-              
+
+                class0Counter = 0;
+                class1Counter = 0;
+                class2Counter = 0;
 
                 for (int j = 0; j < 10; j++)
                 {
@@ -186,6 +196,7 @@ namespace HFT.Logic
                     newRecord1[j, 1] = sellOffer[i - j].Shares;
                     newRecord1[j, 2] = buyOffer[i - j].PricePoint;
                     newRecord1[j, 3] = buyOffer[i - j].Shares;
+                   
 
                     newRecord2[j, 0] = sellOffer[i - j].PricePoint - buyOffer[i - j].PricePoint;
                     newRecord2[j, 1] = (sellOffer[i - j].PricePoint + buyOffer[i - j].PricePoint)/2;
@@ -203,6 +214,8 @@ namespace HFT.Logic
                     newRecord5[0] += sellOffer[i - j].PricePoint - buyOffer[i - j].PricePoint;
                     newRecord5[1] += sellOffer[i - j].Shares - buyOffer[i - j].Shares;
 
+                    UpClassCounter(sellOffer[i - j].sellClass);
+                    UpClassCounter(sellOffer[i - j].buyClass);
                 }
                 vector1.Add(newRecord1);
                 vector2.Add(newRecord2);
@@ -213,26 +226,56 @@ namespace HFT.Logic
 
                 vector4.Add(newRecord4);
                 vector5.Add(newRecord5);
+                
+                finalClass[i-10] = setClass();//sprawdzić
 
-               
 
             }
             //składamy wektory wejściowe
-            parseVectorsToInputVector();
 
+            var final =parseVectorsToInputVector();
 
-           
+            TrainingSet = new BasicNeuralDataSet(final, finalClass);
+            var a = 0;
         }
 
-        void parseVectorsToInputVector()
+        double[] setClass()
+        {
+            var tmp = new int[] { class0Counter, class1Counter, class2Counter };
+            int maxValue = tmp.Max();
+            int maxIndex = tmp.ToList().IndexOf(maxValue);
+            if ( maxIndex == 1)
+                    return new double[] { 0, 1, 0 };
+            if ( maxIndex == 0)
+                    return new double[] { 1, 0, 0 };
+            if ( maxIndex == 2)
+                    return new double[] { 0, 0, 1 };
+
+
+            return null;
+                    
+            
+            
+        }
+
+        void UpClassCounter(int currClass)
+        {
+            if (currClass == 1)
+                class1Counter++;
+            else if (currClass == 2)
+                class2Counter++;
+            else
+                class0Counter++;
+        }
+
+        double[][] parseVectorsToInputVector()
         {
             double[][] final = new double[vector1.Count][];
-            double[][] state = new double[ vector1.Count][];
+     
 
             for (int i = 0; i < vector1.Count; i++)
             {
                 final[i]= new double[(4 + 2 + 4 + 4 + 2) * 10];
-                state[i] = new double[2];
                 for (int j = 0; j < 10; j++)
                 {
                      final[i][j * 16 + 0] = vector1[i][j,0];
@@ -256,10 +299,9 @@ namespace HFT.Logic
                      final[i][j * 16 + 14] = vector5[i][0];
                      final[i][j * 16 + 15] = vector5[i][1];
 
-                     state[i][ 1] = 1;
+
                 }
 
-                state[i][1] = 1;
             }
 
 
@@ -278,7 +320,7 @@ namespace HFT.Logic
             }
 
 
-            TrainingSet = new BasicNeuralDataSet(final, state);
+            return final;
 
 
         }
