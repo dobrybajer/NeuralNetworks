@@ -157,7 +157,7 @@ namespace HFT.Logic
 
             orderBook = new OrderBook(sellOffer, buyOffer);
 
-            var counter = sellOffer.Count<=buyOffer.Count? sellOffer.Count : buyOffer.Count ;
+            var counter = sellOffer.Count<=buyOffer.Count? sellOffer.Count : buyOffer.Count ; //wybieramy ktorych jest wiecej
             vector1 = new List<double[,]>();
             vector2 = new List<double[,]>();
             vector3 = new List<double[,]>();
@@ -217,9 +217,10 @@ namespace HFT.Logic
                
 
             }
-
-
+            //składamy wektory wejściowe
             parseVectorsToInputVector();
+
+
            
         }
 
@@ -261,10 +262,51 @@ namespace HFT.Logic
                 state[i][1] = 1;
             }
 
+
+            double[] currRow = new double[vector1.Count];
+            for (int i = 0; i < 160; i++)//liczba kolum
+            {
+                for (int j = 0; j < vector1.Count; j++)
+                {
+                    currRow[j] = final[j][i];
+                }
+                currRow = Normalization(currRow);
+                for (int j = 0; j < vector1.Count; j++)
+                {
+                    final[j][i] = currRow[j];
+                }
+            }
+
+
             TrainingSet = new BasicNeuralDataSet(final, state);
 
 
         }
+
+        private double[] Normalization(double[] values)
+        {
+            double means=0;
+            double factor;
+            var Max = values.Max();
+            var Min = values.Min();
+
+            foreach (var value in values)
+                means += value;
+
+
+            means = means / values.Length;
+    
+            if (Math.Abs(Max - means) > Math.Abs(Min - means))
+                factor = Math.Abs(Max - means);
+            else
+                factor = Math.Abs(Min - means);
+
+            for (int i = 0; i < values.Length; i++ )
+                values[i] = (values[i] - means) / factor;
+
+            return values;
+        }
+
 
         #endregion
 

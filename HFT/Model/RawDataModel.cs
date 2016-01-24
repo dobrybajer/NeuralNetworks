@@ -22,6 +22,12 @@ namespace HFT.Model
 
         public int NumberOfOrders { get; set; }
 
+        public int sellClass { get; set; }
+
+        public int buyClass { get; set; }
+
+        public int Group { get; set; }
+
         public RawDataModel(
             string symbol, 
             string status, 
@@ -42,6 +48,9 @@ namespace HFT.Model
             PricePoint = pricePoint;
             Shares = shares;
             NumberOfOrders = numberOfOrders;
+            sellClass = -1;
+            buyClass = -1;
+            Group = -1;
         }
     }
 }

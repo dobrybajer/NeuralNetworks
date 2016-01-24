@@ -26,8 +26,11 @@ namespace HFT
             var testSetPath = Path.Combine(ConfigurationManager.AppSettings["PathToTestFiles"] + ConfigurationManager.AppSettings["TestSet"]);
 
             var parser = new Parser();
-            var trainingSetModel = parser.ReadFile(trainingSetPath);
-            var testSetModel = parser.ReadFile(testSetPath);
+            var classes= new Classification();
+            var trainingSetModel = parser.ReadFile(testSetPath);
+            var testSetModel = parser.ReadFile(trainingSetPath);
+            trainingSetModel = classes.AddClasses(trainingSetModel);
+
 
 
 
