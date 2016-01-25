@@ -1,0 +1,15 @@
+*.png
+Data/error.csv
+*.csv
+Data/error.xlsx
+*.suo
+HFT/obj/Debug/HFT.pdb
+*.exe
+HFT/bin/Debug/HFT.vshost.exe.config
+*.pdb
+HFT/bin/Debug/HFT.exe.config
+*.exe
+*.xlsx
+NeuralNetworks.v12.suo
+*.pdb
+*.config
