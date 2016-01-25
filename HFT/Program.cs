@@ -19,7 +19,11 @@ namespace HFT
                 IterationsCount = int.Parse(ConfigurationManager.AppSettings["IterationsCount"] ?? "2500"),
                 LearingCoefficient = double.Parse(ConfigurationManager.AppSettings["LearingCoefficient"] ?? "0.01", CultureInfo.InvariantCulture),
                 InertiaCoefficient = double.Parse(ConfigurationManager.AppSettings["InertiaCoefficient"] ?? "0.01", CultureInfo.InvariantCulture),
-                AcceptedError = double.Parse(ConfigurationManager.AppSettings["AcceptedError"] ?? "0.0000001", CultureInfo.InvariantCulture)
+                AcceptedError = double.Parse(ConfigurationManager.AppSettings["AcceptedError"] ?? "0.0000001", CultureInfo.InvariantCulture),
+                GroupSize = int.Parse(ConfigurationManager.AppSettings["GroupSize"] ?? "10"),
+                TimeWindow = int.Parse(ConfigurationManager.AppSettings["TimeWindow"] ?? "5"),
+                SlideWindow = int.Parse(ConfigurationManager.AppSettings["SlideWindow"] ?? "1"),
+                ValidationSetSize = double.Parse(ConfigurationManager.AppSettings["ValidationSetSize"] ?? "15", CultureInfo.InvariantCulture)
             };
 
             var trainingSetPath =
@@ -32,15 +36,15 @@ namespace HFT
             var parser = new Parser();
             var classes = new Classification();
 
-            var trainingSetModel = parser.ReadFile(testSetPath);
-            var testSetModel = parser.ReadFile(trainingSetPath);
+            var trainingSetModel = parser.ReadFile(trainingSetPath);
+            var testSetModel = parser.ReadFile(testSetPath);
 
-            trainingSetModel = classes.AddClasses(trainingSetModel);
+            trainingSetModel = classes.AddClasses(trainingSetModel, parameters);
 
-            var classification = new ProblemBase(parameters);
-            classification.Execute(trainingSetModel, testSetModel);
-            //var svm = new SVM(parameters);
-            //svm.Execute(trainingSetModel, testSetModel);
+            //var classification = new ProblemBase(parameters);
+            //classification.Execute(trainingSetModel, testSetModel);
+            var svm = new SVM(parameters);
+            svm.Execute(trainingSetModel, testSetModel);
         }
     }
 }

@@ -11,7 +11,7 @@ namespace HFT.FileProcessing
 
         public static void GenerateCharts()
         {
-            Process.Start("MATLAB.exe", CreateErrorCommand() + CreateDataCommand());
+            Process.Start("MATLAB.exe", CreateErrorCommand());// + CreateDataCommand());
         }
 
         private static string CreateErrorCommand()

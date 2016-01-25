@@ -81,8 +81,8 @@
     <Compile Include="FileProcessing\Matlab.cs" />
     <Compile Include="Logic\MyExtensions.cs" />
     <Compile Include="Logic\SVM.cs" />
+    <Compile Include="Model\FeatureSet.cs" />
     <Compile Include="Model\Network.cs" />
-    <Compile Include="Model\OrderBook.cs" />
     <Compile Include="Model\Parameters.cs" />
     <Compile Include="FileProcessing\Parser.cs" />
     <Compile Include="Logic\ProblemBase.cs" />
@@ -91,7 +91,9 @@
     <Compile Include="Model\RawDataModel.cs" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="App.config" />
+    <None Include="App.config">
+      <SubType>Designer</SubType>
+    </None>
     <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup>

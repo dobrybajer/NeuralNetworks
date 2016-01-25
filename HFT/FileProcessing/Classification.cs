@@ -7,9 +7,9 @@ namespace HFT.FileProcessing
 {
     internal class Classification
     {
-        public List<RawDataModel> AddClasses(List<RawDataModel> trainSet)
+        public List<RawDataModel> AddClasses(List<RawDataModel> trainSet, Parameters parameters)
         {
-            const int time = 5; // TODO parametr okno czasowe
+            var time = parameters.TimeWindow;
 
             var indexFirst = trainSet.FirstOrDefault(x => x.Status == "T") ?? trainSet.First();
             var indexLast = trainSet[trainSet.Count - 1];
