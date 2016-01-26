@@ -146,8 +146,8 @@ namespace HFT.Model
                     newRecord5[0] += sellOffer[i - j].PricePoint - buyOffer[i - j].PricePoint;
                     newRecord5[1] += sellOffer[i - j].Shares - buyOffer[i - j].Shares;
 
-                    ClassCounter[sellOffer[i - j].SellClass < 0 ? 0 : sellOffer[i - j].SellClass]++;
-                    ClassCounter[sellOffer[i - j].BuyClass < 0 ? 0 : sellOffer[i - j].BuyClass]++;
+                    if (sellOffer[i - j].SellClass >= 0) ClassCounter[sellOffer[i - j].SellClass]++;
+                    if (sellOffer[i - j].BuyClass >= 0) ClassCounter[sellOffer[i - j].BuyClass]++;
                 }
 
                 Vector1.Add(newRecord1);
@@ -185,7 +185,7 @@ namespace HFT.Model
             {
                 final[i] = new double[Size];
 
-                for (var j = 0; j < 10; j++)
+                for (var j = 0; j < GroupSize; j++)
                 {
                     final[i][j * 16 + 0] = Vector1[i][j, 0];
                     final[i][j * 16 + 1] = Vector1[i][j, 1];

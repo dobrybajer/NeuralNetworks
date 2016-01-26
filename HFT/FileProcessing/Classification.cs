@@ -7,12 +7,12 @@ namespace HFT.FileProcessing
 {
     internal class Classification
     {
-        public List<RawDataModel> AddClasses(List<RawDataModel> trainSet, Parameters parameters)
+        public List<RawDataModel> AddClasses(List<RawDataModel> set, Parameters parameters)
         {
             var time = parameters.TimeWindow;
 
-            var indexFirst = trainSet.FirstOrDefault(x => x.Status == "T") ?? trainSet.First();
-            var indexLast = trainSet[trainSet.Count - 1];
+            var indexFirst = set.FirstOrDefault(x => x.Status == "T") ?? set.First();
+            var indexLast = set[set.Count - 1];
 
             var endTime = indexFirst.UpdateTime;
             endTime = endTime.AddMinutes(time);
@@ -31,7 +31,7 @@ namespace HFT.FileProcessing
             var buyRecordCount = new int[(int) Math.Ceiling((double) counterSet/time) + 1];
             var buyClassForTime = new int[(int) Math.Ceiling((double) counterSet/time)];
 
-            foreach (var el in trainSet)
+            foreach (var el in set)
             {
                 if (el.Status == "1") //dane po nocnej zmianie
                 {
@@ -129,13 +129,13 @@ namespace HFT.FileProcessing
             }
 
             //Finalne przypisanie kalsy do rekordu
-            foreach (var el in trainSet.Where(el => el.Group < sellClassForTime.Length))
+            foreach (var el in set.Where(el => el.Group < sellClassForTime.Length))
                 if (el.OrderType == 1)          
                     el.SellClass = sellClassForTime[el.Group]; 
                 else
                     el.BuyClass = buyClassForTime[el.Group];
 
-            return trainSet;
+            return set;
         }
     }
 }
